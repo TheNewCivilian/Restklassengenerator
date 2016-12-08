@@ -5,10 +5,47 @@
 #include <QVBoxLayout>
 #include <QSlider>
 #include <QSpinBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QtGui>
+
+class MyWidget : public QWidget
+{
+public:
+    MyWidget();
+
+protected:
+    void paintEvent(QPaintEvent *);
+};
+
+
+MyWidget::MyWidget()
+{
+    QPalette palette(MyWidget::palette());
+    palette.setColor(backgroundRole(), Qt::white);
+    setPalette(palette);
+}
+
+void MyWidget::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::darkGreen);
+    // x,y,with,height
+    painter.drawRect(1, 1, 10, 10);
+
+    QRect rect = QRect(10, 10, 45, 20);
+    painter.drawText(rect, Qt::AlignCenter,"123");
+    //RgB(r,g,b)
+    painter.fillRect(rect,qRgb(232,121,10));
+    painter.setPen(Qt::darkGray);
+    painter.drawLine(2, 8, 6, 2);
+}
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
     QWidget *window = new QWidget;
     window->setWindowTitle("Restklassengenerator");
 
@@ -41,6 +78,8 @@ int main(int argc, char *argv[])
     QObject::connect(button_quit,SIGNAL(clicked()), &app, SLOT(quit()));
     //QLabel *label = new QLabel("Hello Qt!");
 
+    MyWidget widget;
     window->show();
+    widget.show();
     return app.exec();
 }
