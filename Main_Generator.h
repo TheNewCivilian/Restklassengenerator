@@ -24,6 +24,7 @@ public:
 
 public slots:
   void generateWasClicked();
+  void setValue(int);
 };
 
 #endif

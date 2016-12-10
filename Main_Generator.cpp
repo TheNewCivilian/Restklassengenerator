@@ -14,3 +14,7 @@ void Main_Generator::generateWasClicked() {
     printf("\n");
   }
 }
+
+void Main_Generator::setValue(int x){
+  mod_x = x;
+}

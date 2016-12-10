@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     QObject::connect(button_generate,SIGNAL(clicked()),main_Generator,SLOT(generateWasClicked()));
     QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider,SLOT(setValue(int)));
     QObject::connect(slider,SIGNAL(valueChanged(int)), spinBox,SLOT(setValue(int)));
+    QObject::connect(slider,SIGNAL(valueChanged(int)), main_Generator,SLOT(setValue(int)));
     QObject::connect(button_quit,SIGNAL(clicked()), &app, SLOT(quit()));
 
     MyWidget widget;
