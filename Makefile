@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Restklassenmaker1.0.0
-DISTDIR = /home/orangemaster/Projects/Webkit/Restklassenmaker/.tmp/Restklassenmaker1.0.0
+DISTDIR = /home/orangemaster/Projects/Qt/Restklassenmaker/.tmp/Restklassenmaker1.0.0
 LINK          = g++
 LFLAGS        = -m64 -Wl,-O1
 LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -48,8 +48,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp 
-OBJECTS       = main.o
+SOURCES       = main.cpp \
+		Main_Generator.cpp moc_Main_Generator.cpp
+OBJECTS       = main.o \
+		Main_Generator.o \
+		moc_Main_Generator.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -116,7 +119,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Restklassenmaker.pro  main.cpp
+		Restklassenmaker.pro Main_Generator.h main.cpp \
+		Main_Generator.cpp
 QMAKE_TARGET  = Restklassenmaker
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Restklassenmaker
@@ -302,7 +306,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Main_Generator.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp Main_Generator.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -325,8 +330,12 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_Main_Generator.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_Main_Generator.cpp
+moc_Main_Generator.cpp: Main_Generator.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Main_Generator.h -o moc_Main_Generator.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -337,12 +346,18 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_moc_header_clean 
 
 ####### Compile
 
-main.o: main.cpp 
+main.o: main.cpp Main_Generator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+Main_Generator.o: Main_Generator.cpp Main_Generator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Main_Generator.o Main_Generator.cpp
+
+moc_Main_Generator.o: moc_Main_Generator.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Main_Generator.o moc_Main_Generator.cpp
 
 ####### Install
 

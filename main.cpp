@@ -1,13 +1,4 @@
-#include <QApplication>
-#include <QLabel>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QSlider>
-#include <QSpinBox>
-#include <QPainter>
-#include <QPixmap>
-#include <QtGui>
+#include "Main_Generator.h"
 
 class MyWidget : public QWidget
 {
@@ -17,7 +8,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *);
 };
-
 
 MyWidget::MyWidget()
 {
@@ -42,6 +32,7 @@ void MyWidget::paintEvent(QPaintEvent *)
     painter.drawLine(2, 8, 6, 2);
 }
 
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -56,12 +47,14 @@ int main(int argc, char *argv[])
     QPushButton *button_quit = new QPushButton("Quit");
     QHBoxLayout *layout_hbox01 = new QHBoxLayout;
     QVBoxLayout *layout_vbox01 = new QVBoxLayout;
+    Main_Generator *main_Generator = new Main_Generator();
 
     //Definitionen
     spinBox->setRange(0,130);
     slider->setRange(0,130);
     spinBox->setValue(35);
     slider->setValue(35);
+    main_Generator->mod_x = slider->value();
 
     //Definitionen_Layout
     layout_hbox01->addWidget(spinBox);
@@ -72,11 +65,10 @@ int main(int argc, char *argv[])
     window->setLayout(layout_vbox01);
 
     //Connections
-    QObject::connect(button_generate,SIGNAL(clicked()), &app, SLOT(quit()));
+    QObject::connect(button_generate,SIGNAL(clicked()),main_Generator,SLOT(generateWasClicked()));
     QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider,SLOT(setValue(int)));
     QObject::connect(slider,SIGNAL(valueChanged(int)), spinBox,SLOT(setValue(int)));
     QObject::connect(button_quit,SIGNAL(clicked()), &app, SLOT(quit()));
-    //QLabel *label = new QLabel("Hello Qt!");
 
     MyWidget widget;
     window->show();
