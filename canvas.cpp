@@ -26,13 +26,13 @@ void Canvas::setValue(int x){
       int a = (i*j)%mod_wx ;
       if(a > mod_wx/2) {
 
-        rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, i+xlen, j+ylen);
+        rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, xlen, ylen);
         mod_info[c] = (mod_wx -a)*-1;
         //painter.drawText(rect, Qt::AlignCenter,"0"); //(mod_wx -a)*-1
         //printf("%4i", (mod_x -a)*-1);
         c++;
       } else {
-        rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, i+xlen, j+ylen);
+        rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, xlen, ylen);
         mod_info[c] = a;
         //painter.drawText(rect, Qt::AlignCenter,"0");
         //printf("%4i", a);
