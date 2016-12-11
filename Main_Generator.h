@@ -18,13 +18,18 @@
 class Main_Generator : public QWidget
 {
   Q_OBJECT
+
 public:
   int mod_x;
+  int value() const { return mod_x; }
   //Main_Generator();
 
 public slots:
   void generateWasClicked();
   void setValue(int);
+
+signals:
+  void valueChanged(int);
 };
 
 #endif

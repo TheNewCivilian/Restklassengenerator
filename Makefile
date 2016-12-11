@@ -48,10 +48,14 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
-		Main_Generator.cpp moc_Main_Generator.cpp
-OBJECTS       = main.o \
+SOURCES       = canvas.cpp \
+		main.cpp \
+		Main_Generator.cpp moc_canvas.cpp \
+		moc_Main_Generator.cpp
+OBJECTS       = canvas.o \
+		main.o \
 		Main_Generator.o \
+		moc_canvas.o \
 		moc_Main_Generator.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -119,7 +123,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Restklassenmaker.pro Main_Generator.h main.cpp \
+		Restklassenmaker.pro canvas.h \
+		Main_Generator.h canvas.cpp \
+		main.cpp \
 		Main_Generator.cpp
 QMAKE_TARGET  = Restklassenmaker
 DESTDIR       = #avoid trailing-slash linebreak
@@ -306,8 +312,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents Main_Generator.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp Main_Generator.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents canvas.h Main_Generator.h $(DISTDIR)/
+	$(COPY_FILE) --parents canvas.cpp main.cpp Main_Generator.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -330,9 +336,12 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_Main_Generator.cpp
+compiler_moc_header_make_all: moc_canvas.cpp moc_Main_Generator.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_Main_Generator.cpp
+	-$(DEL_FILE) moc_canvas.cpp moc_Main_Generator.cpp
+moc_canvas.cpp: canvas.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include canvas.h -o moc_canvas.cpp
+
 moc_Main_Generator.cpp: Main_Generator.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/home/orangemaster/Projects/Qt/Restklassenmaker -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Main_Generator.h -o moc_Main_Generator.cpp
 
@@ -350,11 +359,18 @@ compiler_clean: compiler_moc_header_clean
 
 ####### Compile
 
-main.o: main.cpp Main_Generator.h
+canvas.o: canvas.cpp canvas.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canvas.o canvas.cpp
+
+main.o: main.cpp Main_Generator.h \
+		canvas.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 Main_Generator.o: Main_Generator.cpp Main_Generator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Main_Generator.o Main_Generator.cpp
+
+moc_canvas.o: moc_canvas.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canvas.o moc_canvas.cpp
 
 moc_Main_Generator.o: moc_Main_Generator.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Main_Generator.o moc_Main_Generator.cpp

@@ -1,37 +1,5 @@
 #include "Main_Generator.h"
-
-class MyWidget : public QWidget
-{
-public:
-    MyWidget();
-
-protected:
-    void paintEvent(QPaintEvent *);
-};
-
-MyWidget::MyWidget()
-{
-    QPalette palette(MyWidget::palette());
-    palette.setColor(backgroundRole(), Qt::white);
-    setPalette(palette);
-}
-
-void MyWidget::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::darkGreen);
-    // x,y,with,height
-    painter.drawRect(1, 1, 10, 10);
-
-    QRect rect = QRect(10, 10, 45, 20);
-    painter.drawText(rect, Qt::AlignCenter,"123");
-    //RgB(r,g,b)
-    painter.fillRect(rect,qRgb(232,121,10));
-    painter.setPen(Qt::darkGray);
-    painter.drawLine(2, 8, 6, 2);
-}
-
+#include "canvas.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,37 +10,50 @@ int main(int argc, char *argv[])
 
     // Dekleration der Objekte
     QSpinBox *spinBox = new QSpinBox;
-    QSlider *slider = new QSlider(Qt::Horizontal);
+    QSlider *slider_generator = new QSlider(Qt::Horizontal);
+    QSlider *slider_zoom = new QSlider(Qt::Horizontal);
     QPushButton *button_generate = new QPushButton("Generate");
     QPushButton *button_quit = new QPushButton("Quit");
     QHBoxLayout *layout_hbox01 = new QHBoxLayout;
     QVBoxLayout *layout_vbox01 = new QVBoxLayout;
     Main_Generator *main_Generator = new Main_Generator();
+    Canvas *canvas = new Canvas();
+    QLabel *label_generator = new QLabel("Modulo value:");
+    QLabel *label_zoom = new QLabel("Zoom value:");
 
     //Definitionen
-    spinBox->setRange(0,130);
-    slider->setRange(0,130);
-    spinBox->setValue(35);
-    slider->setValue(35);
-    main_Generator->mod_x = slider->value();
+    spinBox->setRange(1,256);
+    slider_generator->setRange(1,256);
+    slider_zoom->setRange(1,10);
+    spinBox->setValue(10);
+    slider_generator->setValue(10);
+    slider_zoom->setValue(1);
+    main_Generator->mod_x = slider_generator->value();
 
     //Definitionen_Layout
     layout_hbox01->addWidget(spinBox);
-    layout_hbox01->addWidget(slider);
+    layout_hbox01->addWidget(slider_generator);
+
     layout_hbox01->addWidget(button_generate);
+    layout_vbox01->addWidget(label_generator);
     layout_vbox01->addLayout(layout_hbox01);
+    layout_vbox01->addWidget(label_zoom);
+    layout_vbox01->addWidget(slider_zoom);
     layout_vbox01->addWidget(button_quit);
     window->setLayout(layout_vbox01);
 
     //Connections
     QObject::connect(button_generate,SIGNAL(clicked()),main_Generator,SLOT(generateWasClicked()));
-    QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider,SLOT(setValue(int)));
-    QObject::connect(slider,SIGNAL(valueChanged(int)), spinBox,SLOT(setValue(int)));
-    QObject::connect(slider,SIGNAL(valueChanged(int)), main_Generator,SLOT(setValue(int)));
+    QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider_generator,SLOT(setValue(int)));
+    QObject::connect(slider_generator,SIGNAL(valueChanged(int)), spinBox,SLOT(setValue(int)));
+    QObject::connect(slider_generator,SIGNAL(valueChanged(int)), main_Generator,SLOT(setValue(int)));
+    QObject::connect(slider_zoom,SIGNAL(valueChanged(int)), canvas,SLOT(setZoom(int)));
     QObject::connect(button_quit,SIGNAL(clicked()), &app, SLOT(quit()));
+    QObject::connect(main_Generator,SIGNAL(valueChanged(int)), canvas, SLOT(setValue(int)));
+    QObject::connect(main_Generator,SIGNAL(valueChanged(int)), canvas, SLOT(update()));
 
-    MyWidget widget;
+    //Draw Windows
+    canvas->show();
     window->show();
-    widget.show();
     return app.exec();
 }
