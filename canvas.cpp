@@ -6,11 +6,19 @@ Canvas::Canvas()
     palette.setColor(backgroundRole(), Qt::white);
     setPalette(palette);
     zoom = 1;
+    invert = 0;
 }
 void Canvas::setZoom(int x){
   zoom = x;
 }
 
+void Canvas::setInvert(){
+  if (invert == 0){
+    invert = 1;
+  }else{
+    invert = 0;
+  }
+}
 
 void Canvas::setValue(int x){
   int f;
@@ -27,7 +35,11 @@ void Canvas::setValue(int x){
       if(a > mod_wx/2) {
 
         rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, xlen, ylen);
-        mod_info[c] = (mod_wx -a)*-1;
+        if (invert == 1){
+          mod_info[c] = (mod_wx -a)*-1;
+        }else{
+          mod_info[c] = a;
+        }
         //painter.drawText(rect, Qt::AlignCenter,"0"); //(mod_wx -a)*-1
         //printf("%4i", (mod_x -a)*-1);
         c++;

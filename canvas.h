@@ -23,10 +23,12 @@ public:
     QRect rect[65536];
     int mod_info[65536];
     int zoom;
+    int invert;
 
 public slots:
   void setValue(int);
   void setZoom(int);
+  void setInvert();
 protected:
     void paintEvent(QPaintEvent *);
 };

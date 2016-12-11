@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
     QSlider *slider_zoom = new QSlider(Qt::Horizontal);
     QPushButton *button_generate = new QPushButton("Generate");
     QPushButton *button_quit = new QPushButton("Quit");
+    QPushButton *button_invert = new QPushButton("Invert");
     QHBoxLayout *layout_hbox01 = new QHBoxLayout;
+    QHBoxLayout *layout_hbox02 = new QHBoxLayout;
     QVBoxLayout *layout_vbox01 = new QVBoxLayout;
     Main_Generator *main_Generator = new Main_Generator();
     Canvas *canvas = new Canvas();
@@ -33,15 +35,17 @@ int main(int argc, char *argv[])
     //Definitionen_Layout
     layout_hbox01->addWidget(spinBox);
     layout_hbox01->addWidget(slider_generator);
-
     layout_hbox01->addWidget(button_generate);
     layout_vbox01->addWidget(label_generator);
     layout_vbox01->addLayout(layout_hbox01);
     layout_vbox01->addWidget(label_zoom);
-    layout_vbox01->addWidget(slider_zoom);
+    layout_hbox02->addWidget(button_invert);
+    layout_hbox02->addWidget(slider_zoom);
+    layout_vbox01->addLayout(layout_hbox02);
     layout_vbox01->addWidget(button_quit);
     window->setLayout(layout_vbox01);
 
+    button_invert->setCheckable(true);
     //Connections
     QObject::connect(button_generate,SIGNAL(clicked()),main_Generator,SLOT(generateWasClicked()));
     QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider_generator,SLOT(setValue(int)));
@@ -49,6 +53,8 @@ int main(int argc, char *argv[])
     QObject::connect(slider_generator,SIGNAL(valueChanged(int)), main_Generator,SLOT(setValue(int)));
     QObject::connect(slider_zoom,SIGNAL(valueChanged(int)), canvas,SLOT(setZoom(int)));
     QObject::connect(button_quit,SIGNAL(clicked()), &app, SLOT(quit()));
+    QObject::connect(button_invert,SIGNAL(clicked()), button_invert, SLOT(on_clicked()));
+    QObject::connect(button_invert,SIGNAL(clicked()), canvas, SLOT(setInvert()));
     QObject::connect(main_Generator,SIGNAL(valueChanged(int)), canvas, SLOT(setValue(int)));
     QObject::connect(main_Generator,SIGNAL(valueChanged(int)), canvas, SLOT(update()));
 
