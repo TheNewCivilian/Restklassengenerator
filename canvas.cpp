@@ -7,12 +7,17 @@ Canvas::Canvas()
     setPalette(palette);
     zoom = 1;
     invert = 0;
-}
-void Canvas::setZoom(int x){
-  zoom = x;
+    setMinimumSize(512*zoom,512*zoom);
 }
 
-void Canvas::setInvert(){
+void Canvas::setZoom(int x)
+{
+  zoom = x;
+  setMinimumSize(512*zoom,512*zoom);
+}
+
+void Canvas::setInvert()
+{
   if (invert == 0){
     invert = 1;
   }else{
@@ -58,7 +63,6 @@ void Canvas::setValue(int x){
 
 void Canvas::paintEvent(QPaintEvent *)
 {
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::darkGreen);
@@ -68,7 +72,7 @@ void Canvas::paintEvent(QPaintEvent *)
     for(i=0; i< mod_wx*mod_wx;i++){
       painter.eraseRect(rect[i]);
       painter.drawRect(rect[i]);
-      painter.fillRect(rect[i],qRgb(265-mod_info[i]*9,128-mod_info[i]*3,mod_info[i]*9));
+      painter.fillRect(rect[i],qRgb(256-mod_info[i]*4,128-mod_info[i]*4,mod_info[i]*2));
       if (512*zoom/mod_wx>= 32){
         painter.setPen(Qt::black);
         painter.drawText(rect[i],Qt::AlignCenter,QString::number(mod_info[i]));

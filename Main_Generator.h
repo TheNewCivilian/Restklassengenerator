@@ -14,6 +14,8 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <stdio.h>
+#include <QDialog>
+#include <QScrollArea>
 
 class Main_Generator : public QWidget
 {

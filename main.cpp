@@ -18,19 +18,28 @@ int main(int argc, char *argv[])
     QHBoxLayout *layout_hbox01 = new QHBoxLayout;
     QHBoxLayout *layout_hbox02 = new QHBoxLayout;
     QVBoxLayout *layout_vbox01 = new QVBoxLayout;
+    QVBoxLayout *layout_scrollo = new QVBoxLayout;
     Main_Generator *main_Generator = new Main_Generator();
     Canvas *canvas = new Canvas();
     QLabel *label_generator = new QLabel("Modulo value:");
     QLabel *label_zoom = new QLabel("Zoom value:");
+    QWidget *scrollo_widget = new QWidget();
+    QScrollArea *scrollo = new QScrollArea();
+
+
 
     //Definitionen
     spinBox->setRange(1,256);
     slider_generator->setRange(1,256);
-    slider_zoom->setRange(1,10);
+    slider_zoom->setRange(1,20);
     spinBox->setValue(10);
     slider_generator->setValue(10);
     slider_zoom->setValue(1);
     main_Generator->mod_x = slider_generator->value();
+    scrollo->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    scrollo->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    scrollo->setWidgetResizable( true );
+    scrollo->setGeometry( 10, 10, 512, 512);
 
     //Definitionen_Layout
     layout_hbox01->addWidget(spinBox);
@@ -44,6 +53,9 @@ int main(int argc, char *argv[])
     layout_vbox01->addLayout(layout_hbox02);
     layout_vbox01->addWidget(button_quit);
     window->setLayout(layout_vbox01);
+    layout_scrollo->addWidget(canvas);
+    scrollo_widget->setLayout(layout_scrollo);
+    scrollo->setWidget(scrollo_widget);
 
     button_invert->setCheckable(true);
     //Connections
@@ -59,7 +71,7 @@ int main(int argc, char *argv[])
     QObject::connect(main_Generator,SIGNAL(valueChanged(int)), canvas, SLOT(update()));
 
     //Draw Windows
-    canvas->show();
+    scrollo->show();
     window->show();
     return app.exec();
 }
