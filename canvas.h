@@ -1,5 +1,4 @@
-#ifndef CANVAS_H_INCLUDED   // if x.h hasn't been included yet...
-#define CANVAS_H_INCLUDED   //   #define this so the compiler knows it has been included
+#pragma once
 #include <QApplication>
 #include <QLabel>
 #include <QPushButton>
@@ -29,9 +28,7 @@ public slots:
   void setValue(int);
   void setZoom(int);
   void setInvert();
+
 protected:
     void paintEvent(QPaintEvent *);
 };
-
-
-#endif

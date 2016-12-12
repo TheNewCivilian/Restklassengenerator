@@ -1,5 +1,4 @@
-#ifndef MAIN_GENERTOR_H_INCLUDED   // if x.h hasn't been included yet...
-#define MAIN_GENERATOR_H_INCLUDED   //   #define this so the compiler knows it has been included
+#pragma once
 
 #include <QApplication>
 #include <QLabel>
@@ -24,7 +23,6 @@ class Main_Generator : public QWidget
 public:
   int mod_x;
   int value() const { return mod_x; }
-  //Main_Generator();
 
 public slots:
   void generateWasClicked();
@@ -33,5 +31,3 @@ public slots:
 signals:
   void valueChanged(int);
 };
-
-#endif

@@ -1,6 +1,11 @@
-Restklassenmaker
-----------------
+# Restklassenmaker/Residue class visualizer #
 
-Der Restklassengenerator ist ein Programm zur Visualisierung von Restklassen.
-Der Modulo kann dabei variable angepasst werden.
-Die Darstellung kann gezoomt werden um genauere Informationen zu erhalten.
+General
+-------
+The Residue Class Visualizer generates residue classes based on user input. The User is able to zoom in bigger residue classes.
+
+Screenshots
+-----------
+![01](img/01.png)
+![02](img/02.png)
+![03](img/03.png)

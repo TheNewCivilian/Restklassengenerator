@@ -26,8 +26,6 @@ int main(int argc, char *argv[])
     QWidget *scrollo_widget = new QWidget();
     QScrollArea *scrollo = new QScrollArea();
 
-
-
     //Definitionen
     spinBox->setRange(1,256);
     slider_generator->setRange(1,256);
@@ -39,7 +37,7 @@ int main(int argc, char *argv[])
     scrollo->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     scrollo->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     scrollo->setWidgetResizable( true );
-    scrollo->setGeometry( 10, 10, 512, 512);
+    scrollo->setGeometry( 2, 2, 512, 512);
 
     //Definitionen_Layout
     layout_hbox01->addWidget(spinBox);
@@ -56,8 +54,8 @@ int main(int argc, char *argv[])
     layout_scrollo->addWidget(canvas);
     scrollo_widget->setLayout(layout_scrollo);
     scrollo->setWidget(scrollo_widget);
-
     button_invert->setCheckable(true);
+
     //Connections
     QObject::connect(button_generate,SIGNAL(clicked()),main_Generator,SLOT(generateWasClicked()));
     QObject::connect(spinBox,SIGNAL(valueChanged(int)),slider_generator,SLOT(setValue(int)));

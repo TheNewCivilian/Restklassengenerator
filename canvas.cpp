@@ -45,30 +45,23 @@ void Canvas::setValue(int x){
         }else{
           mod_info[c] = a;
         }
-        //painter.drawText(rect, Qt::AlignCenter,"0"); //(mod_wx -a)*-1
-        //printf("%4i", (mod_x -a)*-1);
         c++;
       } else {
         rect[c] = QRect(i*xlen-xlen+10, j*ylen-ylen+10, xlen, ylen);
         mod_info[c] = a;
-        //painter.drawText(rect, Qt::AlignCenter,"0");
-        //printf("%4i", a);
         c++;
       }
     }
-    //printf("\n");
   }
-  //printf("Test");
 }
 
 void Canvas::paintEvent(QPaintEvent *)
 {
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::darkGreen);
     int i = 0;
-    //painter.drawRect(1, 1, mod_wx, mod_wx);
-    //rect[1] = QRect(10, 10, i, 2*mod_wx);
     for(i=0; i< mod_wx*mod_wx;i++){
       painter.eraseRect(rect[i]);
       painter.drawRect(rect[i]);
@@ -78,8 +71,24 @@ void Canvas::paintEvent(QPaintEvent *)
         painter.drawText(rect[i],Qt::AlignCenter,QString::number(mod_info[i]));
       }
     }
-    //RgB(r,g,b)
-    //painter.fillRect(rect[1],qRgb(232,121,10));
-    //painter.drawLine(2, 8, 6, 2);
+
+    //Paint to PNG File
+    /*
+    QPixmap output;
+    output.load("res/output.png");
+    QPainter pixPaint(&output);
+    pixPaint.setRenderHint(QPainter::Antialiasing);
+    pixPaint.setPen(Qt::darkGreen);
+    int it = 0;
+    for(it=0; it< mod_wx*mod_wx;it++){
+      pixPaint.eraseRect(rect[it]);
+      pixPaint.drawRect(rect[it]);
+      pixPaint.fillRect(rect[it],qRgb(256-mod_info[it]*4,128-mod_info[it]*4,mod_info[it]*2));
+      if (512*zoom/mod_wx>= 32){
+        pixPaint.setPen(Qt::black);
+        pixPaint.drawText(rect[it],Qt::AlignCenter,QString::number(mod_info[it]));
+      }
+    }
+    */
 
 }
